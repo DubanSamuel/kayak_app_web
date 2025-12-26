@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Registro</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+
+<h2>Editar Registro</h2>
+
+<form method="POST">
+    Fecha: <input type="date" name="fecha" value="{{ r.fecha }}"><br><br>
+    Hora: <input type="time" name="hora" value="{{ r.hora }}"><br><br>
+    Tipo: <input type="text" name="tipo" value="{{ r.tipo }}"><br><br>
+    Valor: <input type="number" name="valor" value="{{ r.valor }}"><br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<br>
+<a href="/">Volver</a>
+
+</body>
+</html>

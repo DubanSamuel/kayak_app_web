@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro Kayak</title>
+
+    <!-- PWA -->
+    <link rel="manifest" href="/static/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 15px;
+            background: #f4f4f4;
+        }
+
+        h2, h3 {
+            text-align: center;
+        }
+
+        form, table {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px;
+            text-align: center;
+        }
+
+        a {
+            text-decoration: none;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Registro de Arriendo de Kayaks</h2>
+
+<form method="POST" action="/agregar">
+    <label>Tipo de Kayak</label>
+    <select name="tipo" id="tipo" onchange="actualizarValor()" required>
+        <option value="">Seleccione</option>
+        <option value="Kayak 1 persona">Kayak 1 persona</option>
+        <option value="Kayak 2 personas">Kayak 2 personas</option>
+        <option value="Otro">Otro</option>
+    </select>
+
+    <label>Valor</label>
+    <input type="number" id="valor" name="valor" required>
+
+    <button type="submit">Agregar</button>
+</form>
+
+<hr>
+
+<h3>Buscar por fecha</h3>
+<form method="POST">
+    <input type="date" name="fecha_buscar" value="{{ fecha_buscar }}">
+    <button type="submit">Buscar</button>
+</form>
+
+<h3>Registros</h3>
+
+<table>
+    <tr>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Tipo</th>
+        <th>Valor</th>
+        <th>Acciones</th>
+    </tr>
+
+    {% for r in registros %}
+    <tr>
+        <td>{{ r.fecha }}</td>
+        <td>{{ r.hora }}</td>
+        <td>{{ r.tipo }}</td>
+        <td>${{ r.valor }}</td>
+        <td>
+            <a href="/editar/{{ loop.index0 }}">Editar</a> |
+            <a href="/eliminar/{{ loop.index0 }}" onclick="return confirm('¿Eliminar este registro?')">Eliminar</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3>Total del día: ${{ total }}</h3>
+
+<script>
+function actualizarValor() {
+    let tipo = document.getElementById("tipo").value;
+    let valor = document.getElementById("valor");
+
+    if (tipo === "Kayak 1 persona") valor.value = 5000;
+    else if (tipo === "Kayak 2 personas") valor.value = 8000;
+    else valor.value = "";
+}
+
+// Registrar Service Worker
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/static/service-worker.js")
+        .then(() => console.log("Service Worker registrado"))
+        .catch(err => console.log("Error SW:", err));
+}
+</script>
+
+</body>
+</html>
